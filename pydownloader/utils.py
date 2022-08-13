@@ -3,7 +3,7 @@ import os
 import re
 import unicodedata
 import re
-
+import string
 
 def slugify(value, allow_unicode=False):
     """
@@ -40,7 +40,7 @@ def req_file_size(req):
 def get_url_file_name(url,req):
     try:
         if "Content-Disposition" in req.headers.keys():
-                name = str(req.headers["Content-Disposition"]).replace('attachment; ','')
+                name = str(req.headers["Content-Disposition"]).replace('attachment;', '').replace('attachment', '') 
                 name = name.replace('filename=','').replace('"','')
                 return name
         else:
@@ -69,3 +69,14 @@ def createID(count=8):
         id+=map[rnd]
         i+=1
     return id
+
+def makeSafeFilename(inputFilename):
+    # Set here the valid chars
+    ret = ''
+    map = '0123456789abcd3fghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.'
+    for char in inputFilename:
+        if char in map:
+           ret += char
+        else:
+           ret += ''
+    return ret

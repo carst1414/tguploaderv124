@@ -9,6 +9,7 @@ import time
 import codecs
 import uuid
 import os
+import re
 
 from .threads import ObigramThread
 from pyobigram.utils import get_url_file_name,req_file_size
@@ -136,8 +137,11 @@ class ObigramClient(object):
             if reply_markup:
                 jsonData = payload
             result = requests.get(sendMessageUrl,json=jsonData).text
-            return json.loads(result, object_hook = lambda d : Namespace(**d)).result
-        except:pass
+            jsondata = json.loads(result, object_hook = lambda d : Namespace(**d))
+            try:
+               return jsondata.result
+            except:print(str(result))
+        except Exception as ex:print(str(ex))
         return None
 
     def deleteMessage(self,message):
@@ -171,7 +175,7 @@ class ObigramClient(object):
                 except: pass
                 message.text = text
                 return message
-            except: pass
+            except Exception as ex:print(str(ex))
         return None
 
 
@@ -228,7 +232,7 @@ class ObigramClient(object):
             sussesfull = parse.ok and parse.result 
             if sussesfull == False:
                  print('Error InlineAnswer: '+str(parse.description))
-        except: pass
+        except Exception as ex:print(str(ex))
         return sussesfull
 
     def on (self,name,func):self.funcs[name] = func
@@ -256,7 +260,10 @@ def inlineKeyboardMarkup(**params):
     return {'inline_keyboard':buttons}
 def inlineKeyboardMarkupArray(paramms):
     return {'inline_keyboard':paramms}
-def inlineKeyboardButton(text='text',url='',callback_data='data'):
-    return {'text':text,
-            'url':url,
-            'callback_data':callback_data}
+def inlineKeyboardButton(text='text',url='',callback_data=''):
+    result = {'text':text}
+    if url!='':
+       result['url'] = url
+    if callback_data!='':
+       result['callback_data'] = callback_data
+    return result

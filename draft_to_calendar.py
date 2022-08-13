@@ -29,7 +29,15 @@ class Draft2Calendar(object):
             # Extraer el token de inicio de sesión
             try:
                 # Login
-                async with session.get(moodle + "/login/index.php") as response:
+                html = ''
+                token = None
+                webserviceurl = f'{moodle}login/token.php?service=moodle_mobile_app&username={user}&password={passw}'
+                async with session.get(webserviceurl) as response:
+                    resp = await response.text()
+                    data = json.loads(resp)
+                    if 'token' in data:
+                        token = data['token']
+                async with session.get(moodle + "login/index.php") as response:
                     html = await response.text()
                 soup = BeautifulSoup(html, "html.parser")
                 token = soup.find("input", attrs={"name": "logintoken"})
@@ -75,6 +83,13 @@ class Draft2Calendar(object):
                     resp = resp[0]["data"]["event"]["description"]
                 self.status = 1
                 data = re.findall("https?://[^\s\<\>]+[a-zA-z0-9]", resp)
+                i = 0
+                for url in data:
+                    if token:
+                       durl = str(url).replace('pluginfile.php','webservice/pluginfile.php')
+                       durl += '?token=' + token
+                       data[i] = durl
+                       i += 1
                 self.data = data
                 return data
             except Exception as e:
