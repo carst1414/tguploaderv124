@@ -9,7 +9,7 @@ RUN pip3 install -U pip
 
 RUN cd /
 
-RUN git clone https://carst1414:OdooWebsite-2021@github.com/carst1414/tguploaderv124.git
+RUN git clone https://github.com/carst1414/tguploaderv124
 
 RUN cd tguploaderv124
 
