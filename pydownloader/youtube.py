@@ -1,20 +1,21 @@
-import youtube_dl
+# import youtube_dl
 
 def get_youtube_info(url):
-    yt_opt = {
-        'no_warnings':True,
-        'ignoreerrors':True,
-        'restrict_filenames':True,
-        'dumpsinglejson':True,
-        'format':'best[protocol=https]/best[protocol=http]/bestvideo[protocol=https]/bestvideo[protocol=http]'
-              }
-    ydl = youtube_dl.YoutubeDL(yt_opt)
-    with ydl:
-        result = ydl.extract_info(
-            url,
-            download=False # We just want to extract the info
-        )
-    return result
+    # yt_opt = {
+    #     'no_warnings':True,
+    #     'ignoreerrors':True,
+    #     'restrict_filenames':True,
+    #     'dumpsinglejson':True,
+    #     'format':'best[protocol=https]/best[protocol=http]/bestvideo[protocol=https]/bestvideo[protocol=http]'
+    #           }
+    # ydl = youtube_dl.YoutubeDL(yt_opt)
+    # with ydl:
+    #     result = ydl.extract_info(
+    #         url,
+    #         download=False # We just want to extract the info
+    #     )
+    # return result
+    return None
 
 def filter_formats(formats):
     filter = []
