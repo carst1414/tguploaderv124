@@ -1,0 +1,4 @@
+start - *
+getdb - *
+tutorial - *
+info - *
